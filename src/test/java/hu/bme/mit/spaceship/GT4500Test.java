@@ -9,16 +9,25 @@ import org.junit.Test;
 public class GT4500Test {
 
   private GT4500 ship;
+  TorpedoStore t1;
+  TorpedoStore t2;
 
   @Before
   public void init(){
-    this.ship = new GT4500();
+	  t1 = mock(TorpedoStore.class);
+	  t2 = mock(TorpedoStore.class);
+    this.ship = new GT4500(t1, t2);
   }
 
   @Test
   public void fireTorpedos_Single_Success(){
     // Arrange
-
+	  when(t1.isEmpty()).thenReturn(false);
+	  when(t2.isEmpty()).thenReturn(false);
+	  
+	  when(t1.fire(1)).thenReturn(true);
+	  when(t2.fire(1)).thenReturn(true);
+	  
     // Act
     boolean result = ship.fireTorpedos(FiringMode.SINGLE);
 
@@ -29,6 +38,11 @@ public class GT4500Test {
   @Test
   public void fireTorpedos_All_Success(){
     // Arrange
+	  when(t1.getNumberOfTorpedos()).thenReturn(1);
+	  when(t2.getNumberOfTorpedos()).thenReturn(1);
+	  
+	  when(t1.fire(1)).thenReturn(true);
+	  when(t2.fire(1)).thenReturn(true);
 
     // Act
     boolean result = ship.fireTorpedos(FiringMode.ALL);
