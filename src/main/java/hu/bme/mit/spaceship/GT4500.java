@@ -10,9 +10,10 @@ public class GT4500 implements SpaceShip {
 
   private boolean wasPrimaryFiredLast = false;
 
-  public GT4500() {
-    this.primaryTorpedoStore = new TorpedoStore(10);
-    this.secondaryTorpedoStore = new TorpedoStore(10);
+  // 10 van a konstruktorukban
+  public GT4500(TorpedoStore t1, TorpedoStore t2) {
+    this.primaryTorpedoStore = t1;
+    this.secondaryTorpedoStore = t2;
   }
 
   public boolean fireLasers(FiringMode firingMode) {
@@ -79,17 +80,17 @@ public class GT4500 implements SpaceShip {
       case ALL: // new comment
         // try to fire both of the torpedos
     		  for(int i = 1; i <= primaryTorpedoStore.getNumberOfTorpedos(); i++) {
-    			  firingSuccess = primaryTorpedoStore.fire(i);
+    			  if(primaryTorpedoStore.fire(i)) {
+    				  firingSuccess = true;
+    			  }
     		  }
     	  
     		  for(int j = 1; j <= secondaryTorpedoStore.getNumberOfTorpedos(); j++) {
-    			  firingSuccess = secondaryTorpedoStore.fire(j);
+    			  if(secondaryTorpedoStore.fire(j)) {
+    				  firingSuccess = true;
+    			  }
     		  }
         break;
-        
-      default:
-    	  firingSuccess = false;
-    	  break;
         
     }
 
