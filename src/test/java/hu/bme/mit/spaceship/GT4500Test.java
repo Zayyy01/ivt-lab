@@ -129,5 +129,18 @@ public class GT4500Test {
 	// Assert
 	verify(t1, times(0)).fire(1);
   }
+  
+  @Test
+  public void fireTorpedos_All_FirstTorpedoStore_VerifyNumberOfFires() {
+	// Arrange
+	when(t1.getNumberOfTorpedos()).thenReturn(3);
+	when(t2.getNumberOfTorpedos()).thenReturn(0);
+		  
+	// Act
+	boolean result = ship.fireTorpedos(FiringMode.ALL);
+
+	// Assert
+	verify(t1, times(1)).fire(3);
+  }
 
 }
