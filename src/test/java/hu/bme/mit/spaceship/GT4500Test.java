@@ -50,5 +50,84 @@ public class GT4500Test {
     // Assert
     assertEquals(true, result);
   }
+  
+  @Test
+  public void fireTorpedos_Single_FirstIsEmpty_Success() {
+	// Arrange
+	when(t1.isEmpty()).thenReturn(true);
+	when(t2.isEmpty()).thenReturn(false);
+		  
+	when(t1.fire(1)).thenReturn(false);
+	when(t2.fire(1)).thenReturn(true);
+		  
+	// Act
+	boolean result = ship.fireTorpedos(FiringMode.SINGLE);
+
+	// Assert
+	assertEquals(true, result);
+  }
+  
+  @Test
+  public void fireTorpedos_Single_SecondIsEmpty_Success() {
+	// Arrange
+	when(t1.isEmpty()).thenReturn(false);
+	when(t2.isEmpty()).thenReturn(true);
+		  
+	when(t1.fire(1)).thenReturn(true);
+	when(t2.fire(1)).thenReturn(false);
+		  
+	// Act
+	boolean result = ship.fireTorpedos(FiringMode.SINGLE);
+
+	// Assert
+	assertEquals(true, result);
+  }
+  
+  @Test
+  public void fireTorpedos_Single_BothIsEmpty_Failure() {
+	// Arrange
+	when(t1.isEmpty()).thenReturn(true);
+	when(t2.isEmpty()).thenReturn(true);
+		  
+	when(t1.fire(1)).thenReturn(false);
+	when(t2.fire(1)).thenReturn(false);
+		  
+	// Act
+	boolean result = ship.fireTorpedos(FiringMode.SINGLE);
+
+	// Assert
+	assertEquals(false, result);
+  }
+  
+  @Test
+  public void fireTorpedos_All_BothIsEmpty_Failure() {
+	// Arrange
+	when(t1.getNumberOfTorpedos()).thenReturn(0);
+	when(t2.getNumberOfTorpedos()).thenReturn(0);
+		  
+	when(t1.fire(1)).thenReturn(false);
+	when(t2.fire(1)).thenReturn(false);
+		  
+	// Act
+	boolean result = ship.fireTorpedos(FiringMode.ALL);
+
+	// Assert
+	assertEquals(false, result);
+  }
+  
+  @Test
+  public void fireTorpedos_Single_FirstTorpedoStore_NotFired() {
+	// Arrange
+	when(t1.isEmpty()).thenReturn(true);
+	when(t2.isEmpty()).thenReturn(false);
+		  
+	when(t2.fire(1)).thenReturn(false);
+		  
+	// Act
+	boolean result = ship.fireTorpedos(FiringMode.SINGLE);
+
+	// Assert
+	verify(t1, times(0)).fire(1);
+  }
 
 }
