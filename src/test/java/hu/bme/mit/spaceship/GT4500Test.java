@@ -131,7 +131,7 @@ public class GT4500Test {
   }
   
   @Test
-  public void fireTorpedos_All_FirstTorpedoStore_VerifyNumberOfFires() {
+  public void fireTorpedos_All_FirstTorpedoStore_PrimaryStore_VerifyNumberOfFires() {
 	// Arrange
 	when(t1.getNumberOfTorpedos()).thenReturn(3);
 	when(t2.getNumberOfTorpedos()).thenReturn(0);
@@ -142,5 +142,79 @@ public class GT4500Test {
 	// Assert
 	verify(t1, times(1)).fire(3);
   }
+  
+  @Test
+  public void fireTorpedos_All_FirstTorpedoStore_SecondaryStore_VerifyNumberOfFires() {
+	// Arrange
+	when(t1.getNumberOfTorpedos()).thenReturn(0);
+	when(t2.getNumberOfTorpedos()).thenReturn(3);
+		  
+	// Act
+	boolean result = ship.fireTorpedos(FiringMode.ALL);
 
+	// Assert
+	verify(t2, times(1)).fire(3);
+  }
+  
+  @Test
+  public void fireTorpedos_Single_PrimaryFiredLast_SecondaryNotEmpty_Success() {
+	// Arrange
+	when(t1.isEmpty()).thenReturn(false);
+	when(t2.isEmpty()).thenReturn(false);
+		  
+	when(t1.fire(1)).thenReturn(true);
+	when(t2.fire(1)).thenReturn(true);
+		  
+	// Act
+	ship.fireTorpedos(FiringMode.SINGLE);
+	boolean result = ship.fireTorpedos(FiringMode.SINGLE);
+
+	// Assert
+	assertEquals(true, result);
+  }
+  
+  @Test
+  public void fireTorpedos_Single_PrimaryFiredLast_SecondaryEmpty_Success() {
+	// Arrange
+	when(t1.isEmpty()).thenReturn(false);
+	when(t2.isEmpty()).thenReturn(true);
+		  
+	when(t1.fire(1)).thenReturn(true);
+		  
+	// Act
+	ship.fireTorpedos(FiringMode.SINGLE);
+	boolean result = ship.fireTorpedos(FiringMode.SINGLE);
+
+	// Assert
+	assertEquals(true, result);
+  }
+  
+  @Test
+  public void fireTorpedos_Single_PrimaryFiredLast_BothIsEmpty_Failure() {
+	// Arrange
+	when(t1.isEmpty()).thenReturn(false);
+	when(t2.isEmpty()).thenReturn(true);
+		  
+		  
+	// Act
+	ship.fireTorpedos(FiringMode.SINGLE);
+	
+	when(t1.isEmpty()).thenReturn(true);
+	boolean result = ship.fireTorpedos(FiringMode.SINGLE);
+
+	// Assert
+	assertEquals(false, result);
+  }
+  
+  @Test
+  public void fireLasers_Failure() {
+	// Arrange
+	  
+		  
+	// Act
+	  boolean result = ship.fireLasers(FiringMode.SINGLE);
+
+	// Assert
+	assertEquals(false, result);
+  }
 }
